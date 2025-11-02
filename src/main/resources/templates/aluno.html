@@ -5,13 +5,15 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Alunos</title>
+
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         function confirmDelete(event) {
             if (!confirm("Você tem certeza de que deseja excluir este aluno?")) {
-                event.preventDefault(); // Impede a navegação se a confirmação for cancelada
+                event.preventDefault(); // Impede a exclusão se cancelar
             }
         }
     </script>
@@ -22,6 +24,7 @@
         <div class="card-header bg-primary text-white">
             <strong>Alunos</strong>
         </div>
+
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover table-bordered align-middle">
@@ -30,6 +33,7 @@
                         <th>ID</th>
                         <th>Aluno</th>
                         <th>Tipo de Aluno</th>
+                        <th>Endereço</th>
                         <th>Ações</th>
                     </tr>
                     </thead>
@@ -38,10 +42,21 @@
                         <td th:text="${aluno.id}"></td>
                         <td th:text="${aluno.nome}"></td>
                         <td th:text="${aluno.tipoAluno.descricao}"></td>
+
+                        <!-- Mostrando o endereço completo -->
+                        <td>
+                            <span th:text="${aluno.rua}"></span>,
+                            <span th:text="${aluno.numero}"></span> -
+                            <span th:text="${aluno.cidade}"></span>
+                        </td>
+
                         <td>
                             <div class="d-flex justify-content-end gap-2">
-                                <a class="btn btn-sm btn-outline-primary" th:href="@{/edit/{id}(id=${aluno.id})}">Editar</a>
-                                <a class="btn btn-sm btn-outline-danger" th:href="@{/delete/{id}(id=${aluno.id})}" onclick="confirmDelete(event)">Excluir</a>
+                                <a class="btn btn-sm btn-outline-primary"
+                                   th:href="@{/edit/{id}(id=${aluno.id})}">Editar</a>
+                                <a class="btn btn-sm btn-outline-danger"
+                                   th:href="@{/delete/{id}(id=${aluno.id})}"
+                                   onclick="confirmDelete(event)">Excluir</a>
                             </div>
                         </td>
                     </tr>
@@ -49,12 +64,25 @@
                 </table>
             </div>
         </div>
+
+<!--        <div class="card-footer d-flex justify-content-between">-->
+<!--            <span class="text-muted">-->
+<!--                Total de alunos: <span th:text="${#lists.size(alunos)}"></span>-->
+<!--            </span>-->
+<!--            <a class="btn btn-sm btn-primary" th:href="@{/add}">Adicionar</a>-->
+<!--        </div>-->
+
         <div class="card-footer d-flex justify-content-between">
-            <span class="text-muted">Total de alunos: <span th:text="${#lists.size(alunos)}"></span></span>
-            <a class="btn btn-sm btn-primary" th:href="@{/add}">Adicionar</a>
+            <div>
+                <span class="text-muted">
+                    Total de alunos: <span th:text="${#lists.size(alunos)}"></span>
+                </span>
+
+            </div>
+            <a class="btn btn-sm btn-primary" th:href="@{/tipos/}">Gerenciar Tipos</a>
+            <a class="btn btn-sm btn-primary" th:href="@{/add}">Adicionar Aluno</a>
         </div>
     </div>
 </div>
 </body>
-
 </html>

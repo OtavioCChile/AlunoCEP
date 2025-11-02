@@ -2,54 +2,140 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cadastro de Alunos</title>
-    <!-- Bootstrap 5 -->
+    <title>Cadastro de Aluno</title>
+
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
 <body>
 <div class="container my-5">
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white">
-            <strong>Cadastro de Alunos</strong>
+            <strong th:text="${aluno.id == null ? 'Novo Aluno' : 'Editar Aluno'}"></strong>
         </div>
+
         <div class="card-body">
-            <form th:object="${aluno}" th:action="@{/save}" method="POST">
-                <div class="mb-3">
-                    <div class="alert alert-danger d-none" role="alert" th:if="${#fields.hasAnyErrors()}">
-                        <div th:each="detailedError : ${#fields.detailedErrors()}">
-                            <span th:text="${detailedError.message}"></span>
-                        </div>
-                    </div>
-                </div>
+            <form th:action="@{/save}" th:object="${aluno}" method="post" class="row g-3">
 
-                <div class="mb-3">
-                    <label for="id" class="form-label">ID</label>
-                    <input type="text" class="form-control" id="id" th:field="*{id}" readonly/>
-                </div>
+                <input type="hidden" th:field="*{id}" />
 
-                <div class="mb-3">
+                <div class="col-md-6">
                     <label for="nome" class="form-label">Nome</label>
-                    <input type="text" class="form-control" id="nome" th:field="*{nome}" placeholder="Informe o nome do aluno" maxlength="50"/>
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:text="${#fields.errors('nome')}"></div>
+                    <input type="text" th:field="*{nome}" class="form-control" required id="nome">
                 </div>
 
-                <div class="mb-3">
-                    <label for="tipoAluno" class="form-label">Tipo</label>
-                    <select class="form-select" id="tipoAluno" th:field="*{tipoAluno}">
-                        <option value="">Selecione um tipo</option>
-                        <option th:each="tipoAluno : ${tipos}" th:value="${tipoAluno.id}" th:text="${tipoAluno.descricao}"></option>
+                <div class="col-md-3">
+                    <label for="dataNascimento" class="form-label">Data de Nascimento</label>
+                    <input type="date" th:field="*{dataNascimento}" class="form-control" id="dataNascimento">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="tipoAluno" class="form-label">Tipo de Aluno</label>
+                    <select class="form-select" id="tipoAluno" name="tipoAluno" th:field="*{tipoAluno}" required>
+                        <option value="">Selecione...</option>
+                        <option th:each="tipo : ${tipos}"
+                                th:value="${tipo.id}"
+                                th:text="${tipo.descricao}">
+                        </option>
                     </select>
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('tipoAluno')}" th:text="${#fields.errors('tipoAluno')}"></div>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="cep" class="form-label">CEP</label>
+                    <input type="text" th:field="*{cep}" class="form-control" id="cep">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="numero" class="form-label">Número</label>
+                    <input type="number" th:field="*{numero}" class="form-control" id="numero">
+                </div>
+
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="button" class="btn btn-outline-primary w-100" onclick="buscarCep()">
+                        Buscar CEP
+                    </button>
+                </div>
+
+                <div class="col-md-5">
+                    <label for="rua" class="form-label">Rua</label>
+                    <input type="text" th:field="*{rua}" class="form-control" readonly id="rua">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="bairro" class="form-label">Bairro</label>
+                    <input type="text" th:field="*{bairro}" class="form-control" readonly id="bairro">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="cidade" class="form-label">Cidade</label>
+                    <input type="text" th:field="*{cidade}" class="form-control" readonly id="cidade">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="uf" class="form-label">UF</label>
+                    <input type="text" th:field="*{uf}" class="form-control" readonly id="uf">
+                </div>
+
+                <div class="col-12 d-flex justify-content-between mt-3">
+                    <a th:href="@{/}" class="btn btn-secondary">Voltar</a>
+                    <button type="submit" class="btn btn-success">Salvar</button>
                 </div>
 
 
-                <div class="d-flex justify-content-between">
-                    <button type="submit" class="btn btn-primary">Salvar</button>
-                    <a th:href="@{/}" class="btn btn-secondary">Cancelar</a>
-                </div>
+                <script>
+                    // async: Declara que uma função é assíncrona, podendo usar o await dentro dela.
+                    async function buscarCep() {
+                        const cepInput = document.getElementById("cep");
+                        const numeroInput = document.getElementById("numero");
+
+                        const cep = cepInput.value.replaceAll(/\D/g, ""); // Limpa o CEP
+                        const numero = numeroInput.value || 0;
+
+                        if (!cep || cep.length < 8) {
+                            alert("Informe um CEP válido!");
+                            return;
+                        }
+
+                        // Bloqueia os campos para o usuário não digitar enquanto busca
+                        document.getElementById("rua").value = "Buscando...";
+                        document.getElementById("bairro").value = "Buscando...";
+                        document.getElementById("cidade").value = "Buscando...";
+                        document.getElementById("uf").value = "Buscando...";
+
+                        try {
+                            // await: pausa a função async até que a tarefa concluir e retorna o seu resultado.
+                            const response = await fetch(`/buscar-endereco-json/${cep}/${numero}`);
+
+                            if (!response.ok) {
+                                throw new Error('Não foi possível buscar o CEP.');
+                            }
+
+                            const alunoComEndereco = await response.json();
+
+                            cepInput.value = alunoComEndereco.cep;
+                            numeroInput.value = alunoComEndereco.numero;
+                            document.getElementById("rua").value = alunoComEndereco.rua;
+                            document.getElementById("bairro").value = alunoComEndereco.bairro;
+                            document.getElementById("cidade").value = alunoComEndereco.cidade;
+                            document.getElementById("uf").value = alunoComEndereco.uf;
+
+                        } catch (error) {
+                            console.error('Erro ao buscar CEP:', error);
+                            alert('Erro ao buscar CEP. Verifique o console.');
+
+                            // limpar os campos em caso de erro
+                            document.getElementById("rua").value = "";
+                            document.getElementById("bairro").value = "";
+                            document.getElementById("cidade").value = "";
+                            document.getElementById("uf").value = "";
+                        }
+                    }
+                </script>
+
+
             </form>
         </div>
     </div>
