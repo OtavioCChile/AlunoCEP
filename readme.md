@@ -8,7 +8,7 @@ Uma funcionalidade notável é a integração com a API externa **ViaCEP**, que 
 
 * **Backend:** Java (Spring Boot)
 * **Acesso a Dados:** Spring Data JPA
-* **Banco de Dados:** (Não especificado, compatível com qualquer SGBD suportado pelo JPA, como H2, PostgreSQL, MySQL)
+* **Banco de Dados:** H2 (compatível com qualquer SGBD suportado pelo JPA, como PostgreSQL, MySQL)
 * **Template Engine (Frontend):** Thymeleaf
 * **Estilização:** Bootstrap 5
 * **Cliente HTTP:** `RestTemplate` (para consumir a API ViaCEP)
@@ -81,11 +81,11 @@ src/main/resources
 1.  **Pré-requisitos:**
     * Java (JDK 17 ou superior)
     * Maven 3+
-    * Um SGBD (como H2)
+    * Um SGBD (H2)
 
 2.  **Configuração:**
     * Configure sua fonte de dados (URL do banco, usuário, senha) no arquivo `src/main/resources/application.properties`.
-    * Exemplo para banco H2 em memória (não exige instalação):
+    * Banco H2 em memória (não exige instalação):
         ```properties
         spring.datasource.url=jdbc:h2:mem:testdb
         spring.datasource.driverClassName=org.h2.Driver
