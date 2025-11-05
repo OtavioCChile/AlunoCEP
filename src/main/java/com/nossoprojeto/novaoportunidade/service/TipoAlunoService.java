@@ -19,18 +19,14 @@ public class TipoAlunoService {
         return tipoAlunoRepository.findAll();
     }
 
-    //Retorno um post a partir do ID
     public Optional<TipoAluno> findOne(int id) {
         return tipoAlunoRepository.findById(id);
     }
 
-
-    //Salva ou atualiza um post
     public TipoAluno save(TipoAluno tipoAluno) {
         return tipoAlunoRepository.saveAndFlush(tipoAluno);
     }
 
-    //Exclui um post
     public void delete(int id) {
         tipoAlunoRepository.deleteById(id);
     }
