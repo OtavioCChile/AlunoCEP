@@ -14,23 +14,18 @@ public class AlunoService {
     @Autowired
     private AlunoRepository repository; //Injeta o repositório
 
-    //Retorna uma lista com todos posts inseridos
     public List<Aluno> findAll() {
         return repository.findAll();
     }
 
-    //Retorno um post a partir do ID
     public Optional<Aluno> findOne(Long id) {
         return repository.findById(id);
     }
 
-
-    //Salva ou atualiza um post
     public Aluno save(Aluno aluno) {
         return repository.saveAndFlush(aluno);
     }
 
-    //Exclui um post
     public void delete(Long id) {
         repository.deleteById(id);
     }
