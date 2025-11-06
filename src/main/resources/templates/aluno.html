@@ -41,7 +41,7 @@
                     <tr th:each="aluno : ${alunos}">
                         <td th:text="${aluno.id}"></td>
                         <td th:text="${aluno.nome}"></td>
-                        <td th:text="${aluno.tipoAluno.descricao}"></td>
+                        <td th:text="${(aluno.tipoAluno != null) ? aluno.tipoAluno.descricao : 'N/E'}"></td>
 
                         <!-- Mostrando o endereço completo -->
                         <td>
